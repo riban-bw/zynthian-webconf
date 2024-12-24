@@ -135,14 +135,14 @@ class RepositoryHandler(ZynthianConfigHandler):
                 labels = {}
                 for label in tags:
                     if label == self.stable_tag:
-                        labels[label] = f"{label} (Stable release tag - receives updates)"
+                        labels[label] = f"{label} - stable release"
                     else:
-                        labels[label] = f"{label} (Freeze on this tag - no updates)"
+                        labels[label] = f"{label} - freeze on this tag (no updates)"
                 for label in branches:
                     if label == self.stable_branch:
-                        labels[label] = f"{label} (Staging branch - recieves updates)"
+                        labels[label] = f"{label} - staging branch"
                     elif label == self.testing_branch:
-                        labels[label] = f"{label} (Active development branch - receives updates)"
+                        labels[label] = f"{label} - main development branch"
                     else:
                         labels[label] = label
                 config[f"ZYNTHIAN_REPO_{repitem[0]}"] = {
