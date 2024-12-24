@@ -84,8 +84,8 @@ class RepositoryHandler(ZynthianConfigHandler):
                 'type': 'html',
                 'content': "<div class='alert alert-success'>Some repo changed its branch. You may want to <a href='/sw-update'>update the software</a> for getting the latest changes.</div>"
             }
-            self.restart_ui_flag = True
-            self.restart_webconf_flag = True
+            #self.restart_ui_flag = True
+            #self.restart_webconf_flag = True
 
         super().get("Software Versions", config, errors)
 
