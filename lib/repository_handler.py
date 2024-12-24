@@ -23,12 +23,9 @@
 # ********************************************************************
 
 import os
-import re
 import logging
 import tornado.web
-from collections import OrderedDict
-from subprocess import check_output, call
-
+from subprocess import check_output
 
 from lib.zynthian_config_handler import ZynthianConfigHandler
 
