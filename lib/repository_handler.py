@@ -109,7 +109,7 @@ class RepositoryHandler(ZynthianConfigHandler):
         version_options[self.stable_tag] = f"Stable ({self.stable_tag}) - Current stable release version"
         version_options[self.stable_branch] = f"Staging ({self.stable_branch}) - Pre-release testing version"
         version_options[self.testing_branch] = f"Testing ({self.testing_branch}) - Active development version"
-        version_options["custom"] = "Custom - User selected versions of each repository"
+        version_options["custom"] = "Custom - User selected versions of each repository (allow 10s after selecting for webpage to refresh)"
 
         config = {
             "ZYNTHIAN_VERSION": {
