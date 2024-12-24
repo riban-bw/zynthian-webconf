@@ -277,8 +277,10 @@ class DashboardHandler(ZynthianBasicHandler):
 
     @staticmethod
     def get_git_info(path, check_updates=False):
-        branch = check_output("cd %s; git branch | grep '*'" %
-                              path, shell=True).decode()[2:-1]
+        branch = check_output(f"git -C {path} branch | grep '^\*'",
+                                    encoding="utf-8", shell=True)[1:].strip()
+        if branch.startswith("(HEAD detached at "):
+            branch = branch[18:-1]
         gitid = check_output("cd %s; git rev-parse HEAD" %
                              path, shell=True).decode()[:-1]
         if check_updates:
