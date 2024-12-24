@@ -109,7 +109,7 @@ class RepositoryHandler(ZynthianConfigHandler):
         version_options[self.stable_tag] = f"Stable ({self.stable_tag}) - Current stable release version"
         version_options[self.stable_branch] = f"Staging ({self.stable_branch}) - Pre-release testing version"
         version_options[self.testing_branch] = f"Testing ({self.testing_branch}) - Active development version"
-        version_options["custom"] = "Custom - User selected versions of each repository"
+        version_options["custom"] = "Custom - User selected versions of each repository (allow 10s after selecting for webpage to refresh)"
 
         config = {
             "ZYNTHIAN_VERSION": {
@@ -124,10 +124,8 @@ class RepositoryHandler(ZynthianConfigHandler):
         }
         if version == "custom":
             for i, repitem in enumerate(self.repository_list):
-                if refresh_repos:
-                    check_output(f"git -C {repitem[0]} remote update origin --prune", shell=True)
-                tags = self.get_repo_tag_list(repitem[0])
-                branches = self.get_repo_branch_list(repitem[0])
+                tags = self.get_repo_tag_list(repitem[0], refresh_repos)
+                branches = self.get_repo_branch_list(repitem[0], False)
                 options = []
                 if tags:
                     options += tags
@@ -137,14 +135,14 @@ class RepositoryHandler(ZynthianConfigHandler):
                 labels = {}
                 for label in tags:
                     if label == self.stable_tag:
-                        labels[label] = f"{label} (Stable release tag - receives updates)"
+                        labels[label] = f"{label} - stable release"
                     else:
-                        labels[label] = f"{label} (Freeze to this tag - no updates)"
+                        labels[label] = f"{label} - freeze on this tag (no updates)"
                 for label in branches:
                     if label == self.stable_branch:
-                        labels[label] = f"{label} (Staging branch)"
+                        labels[label] = f"{label} - staging branch"
                     elif label == self.testing_branch:
-                        labels[label] = f"{label} (Active development branch)"
+                        labels[label] = f"{label} - main development branch"
                     else:
                         labels[label] = label
                 config[f"ZYNTHIAN_REPO_{repitem[0]}"] = {
@@ -161,16 +159,20 @@ class RepositoryHandler(ZynthianConfigHandler):
         }
         return config
 
-    def get_repo_tag_list(self, repo_name):
+    def get_repo_tag_list(self, repo_name, refresh_repo=True):
         result = []
         repo_dir = self.zynthian_base_dir + "/" + repo_name
+        if refresh_repo:
+            check_output(f"git -C {repo_dir} remote update origin --prune", shell=True)
         result = check_output(f"git -C {repo_dir} tag", encoding="utf-8", shell=True).splitlines()
         result.sort()
         return result
 
-    def get_repo_branch_list(self, repo_name):
+    def get_repo_branch_list(self, repo_name, refresh_repo=True):
         result = []
         repo_dir = self.zynthian_base_dir + "/" + repo_name
+        if refresh_repo:
+            check_output(f"git -C {repo_dir} remote update origin --prune", shell=True)
         for bname in check_output(f"git -C {repo_dir} branch -a", encoding="utf-8", shell=True).splitlines():
             bname = bname.strip()
             if bname.startswith("*"):
