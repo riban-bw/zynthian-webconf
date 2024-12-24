@@ -53,7 +53,7 @@ class RepositoryHandler(ZynthianConfigHandler):
 
     @tornado.web.authenticated
     def get(self, errors=None):
-        super().get("Repositories", self.get_config_info(), errors)
+        super().get("Software Versions", self.get_config_info(), errors)
 
     @tornado.web.authenticated
     def post(self):
@@ -90,7 +90,7 @@ class RepositoryHandler(ZynthianConfigHandler):
             self.restart_ui_flag = True
             self.restart_webconf_flag = True
 
-        super().get("Repositories", config, errors)
+        super().get("Software Versions", config, errors)
 
     def get_config_info(self, version=None, refresh_repos=False):
         """
