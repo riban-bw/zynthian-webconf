@@ -277,15 +277,14 @@ class DashboardHandler(ZynthianBasicHandler):
 
     @staticmethod
     def get_git_info(path, check_updates=False):
-        branch = check_output(f"git -C {path} branch | grep '^\*'",
-                                    encoding="utf-8", shell=True)[1:].strip()
-        if branch.startswith("(HEAD detached at "):
-            branch = branch[18:-1]
-        gitid = check_output("cd %s; git rev-parse HEAD" %
-                             path, shell=True).decode()[:-1]
+        info = zynconf.get_git_version_info(path)
+        if info["tag"]:
+            branch = f"{info['tag']}.{info['minor']}.{info['patch']}"
+        else:
+            branch = info['branch']
+        gitid = zynconf.get_git_local_hash(path)
         if check_updates:
-            update = check_output(
-                "cd %s; git remote update; git status --porcelain -bs | grep behind | wc -l" % path, shell=True).decode()
+            update = zynconf.is_git_behind(path)
         else:
             update = None
         return {"branch": branch, "gitid": gitid, "update": update}
