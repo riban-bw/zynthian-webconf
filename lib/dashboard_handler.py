@@ -279,7 +279,10 @@ class DashboardHandler(ZynthianBasicHandler):
     def get_git_info(path, check_updates=False):
         info = zynconf.get_git_version_info(path)
         if info["tag"]:
-            branch = f"{info['tag']}.{info['minor']}.{info['patch']}"
+            if info["minor"] or info["patch"]:
+                branch = info['tag']
+            else:
+                branch = f"{info['tag']}.{info['minor']}.{info['patch']}"
         else:
             branch = info['branch']
         gitid = zynconf.get_git_local_hash(path)

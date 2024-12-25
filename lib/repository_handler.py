@@ -41,12 +41,10 @@ class RepositoryHandler(ZynthianConfigHandler):
     stable_tag = "oram-2409"
     testing_branch = "vangelis"
 
-    repository_list = [
-        ['zynthian-ui', False],
-        ['zynthian-webconf', False],
-        ['zyncoder', True],
-        ['zynthian-sys', True],
-        ['zynthian-data', True]
+    advanced_repository_list = [
+        'zyncoder',
+        'zynthian-sys',
+        'zynthian-data'
     ]
 
     @tornado.web.authenticated
@@ -63,7 +61,7 @@ class RepositoryHandler(ZynthianConfigHandler):
             version = self.stable_tag
         errors = {}
         changed_repos = 0
-        for repitem in self.repository_list:
+        for repitem in zynconf.zynthian_repositories:
             posted_key = f"ZYNTHIAN_REPO_{repitem[0]}"
             if version == "custom":
                 try:
@@ -127,8 +125,8 @@ class RepositoryHandler(ZynthianConfigHandler):
             }
         }
         if version == "custom":
-            for i, repitem in enumerate(self.repository_list):
-                path = f"/zynthian/{repitem[0]}"
+            for i, repo in enumerate(zynconf.zynthian_repositories):
+                path = f"/zynthian/{repo}"
                 tags = zynconf.get_git_tags(path, refresh_repos)
                 branches = zynconf.get_git_branches(path, False)
                 options = []
@@ -150,13 +148,13 @@ class RepositoryHandler(ZynthianConfigHandler):
                         labels[label] = f"{label} - main development branch"
                     else:
                         labels[label] = label
-                config[f"ZYNTHIAN_REPO_{repitem[0]}"] = {
+                config[f"ZYNTHIAN_REPO_{repo}"] = {
                     'type': 'select',
-                    'title': repitem[0],
+                    'title': repo,
                     'value': repo_branches[i],
                     'options': options,
                     'option_labels': labels,
-                    'advanced': repitem[1]
+                    'advanced': repo in self.advanced_repository_list
                 }
         config['_SPACER_'] = {
             'type': 'html',
