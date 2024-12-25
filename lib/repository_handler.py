@@ -61,8 +61,8 @@ class RepositoryHandler(ZynthianConfigHandler):
             version = self.stable_tag
         errors = {}
         changed_repos = 0
-        for repitem in zynconf.zynthian_repositories:
-            posted_key = f"ZYNTHIAN_REPO_{repitem[0]}"
+        for repo in zynconf.zynthian_repositories:
+            posted_key = f"ZYNTHIAN_REPO_{repo}"
             if version == "custom":
                 try:
                     branch = postedConfig[posted_key][0]
@@ -71,7 +71,7 @@ class RepositoryHandler(ZynthianConfigHandler):
             else:
                 branch = version
             try:
-                if branch and self.set_repo_branch(repitem[0], branch):
+                if branch and self.set_repo_branch(repo, branch):
                     changed_repos += 1
             except Exception as err:
                 logging.error(err)
@@ -98,9 +98,9 @@ class RepositoryHandler(ZynthianConfigHandler):
         if version is None or version == "custom":
             for repo in zynconf.zynthian_repositories:
                 path = f"/zynthian/{repo}"
-                branch = zynconf.get_git_branch(path)
+                branch = zynconf.get_git_tag(path)
                 if branch is None:
-                    branch = zynconf.get_git_tag(path)
+                    branch = zynconf.get_git_branch(path)
                 repo_branches.append(branch)
                 if branch != repo_branches[0]:
                     version = "custom"
