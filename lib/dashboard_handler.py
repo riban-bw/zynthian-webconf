@@ -285,7 +285,7 @@ class DashboardHandler(ZynthianBasicHandler):
                 branch = f"{info['tag']}.{info['minor']}.{info['patch']}"
         else:
             branch = info['branch']
-        gitid = zynconf.get_git_local_hash(path)
+        gitid = zynconf.get_git_local_hash(path, branch)
         if check_updates:
             update = zynconf.is_git_behind(path)
         else:
