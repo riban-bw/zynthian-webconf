@@ -167,6 +167,8 @@ class RepositoryHandler(ZynthianConfigHandler):
             current_branch = zynconf.get_git_tag(repo_dir)
         if branch_name != current_branch:
             logging.info(f"... needs change: '{current_branch}' != '{branch_name}'")
+            # Must switch to stable branch first to ensure the switch to tag occurs. It may silently fail if tag points to current commit.
+            check_output(f"git -C {repo_dir} checkout .; git -C {repo_dir} checkout {zynconf.stable_branch}", shell=True)
             check_output(f"git -C {repo_dir} checkout .; git -C {repo_dir} checkout {branch_name}", shell=True)
             return True
 
