@@ -44,11 +44,11 @@ class DashboardHandler(ZynthianBasicHandler):
     @tornado.web.authenticated
     def get(self):
         # Get git info
-        git_info_zyncoder = self.get_git_info("/zynthian/zyncoder")
-        git_info_ui = self.get_git_info("/zynthian/zynthian-ui")
-        git_info_sys = self.get_git_info("/zynthian/zynthian-sys")
-        git_info_webconf = self.get_git_info("/zynthian/zynthian-webconf")
-        git_info_data = self.get_git_info("/zynthian/zynthian-data")
+        git_info_zyncoder = zynconf.get_git_version_info("/zynthian/zyncoder")
+        git_info_ui = zynconf.get_git_version_info("/zynthian/zynthian-ui")
+        git_info_sys = zynconf.get_git_version_info("/zynthian/zynthian-sys")
+        git_info_webconf = zynconf.get_git_version_info("/zynthian/zynthian-webconf")
+        git_info_data = zynconf.get_git_version_info("/zynthian/zynthian-data")
 
         # Get Memory & SD Card info
         ram_info = self.get_ram_info()
@@ -160,29 +160,29 @@ class DashboardHandler(ZynthianBasicHandler):
                 'icon': 'glyphicon glyphicon-random',
                 'info': {
                     'ZYNCODER': {
-                        'title': 'zyncoder',
-                        'value': "%s (%s) %s" % (git_info_zyncoder['branch'], git_info_zyncoder['gitid'][0:7], 'Update available' if git_info_zyncoder['update'] == '1' else ''),
-                        'url': "https://github.com/zynthian/zyncoder/commit/{}".format(git_info_zyncoder['gitid'])
+                        "title": "zyncoder",
+                        "value": f"{git_info_zyncoder['display_name']} ({git_info_zyncoder['local_hash'][0:7]})",
+                        "url": f"https://github.com/zynthian/zyncoder/commit/{git_info_zyncoder['local_hash']}"
                     },
                     'UI': {
-                        'title': 'zynthian-ui',
-                        'value': "{} ({})".format(git_info_ui['branch'], git_info_ui['gitid'][0:7], 'Update available' if git_info_ui['update'] == '1' else ''),
-                        'url': "https://github.com/zynthian/zynthian-ui/commit/{}".format(git_info_ui['gitid'])
+                        "title": "zynthian-ui",
+                        "value": f"{git_info_ui['display_name']} ({git_info_ui['local_hash'][0:7]})",
+                        "url": f"https://github.com/zynthian/zyncoder/commit/{git_info_ui['local_hash']}"
                     },
                     'SYS': {
-                        'title': 'zynthian-sys',
-                        'value': "{} ({})".format(git_info_sys['branch'], git_info_sys['gitid'][0:7], 'Update available' if git_info_sys['update'] == '1' else ''),
-                        'url': "https://github.com/zynthian/zynthian-sys/commit/{}".format(git_info_sys['gitid'])
+                        "title": "zynthian-sys",
+                        "value": f"{git_info_sys['display_name']} ({git_info_sys['local_hash'][0:7]})",
+                        "url": f"https://github.com/zynthian/zyncoder/commit/{git_info_sys['local_hash']}"
                     },
                     'DATA': {
-                        'title': 'zynthian-data',
-                        'value': "{} ({})".format(git_info_data['branch'], git_info_data['gitid'][0:7], 'Update available' if git_info_data['update'] == '1' else ''),
-                        'url': "https://github.com/zynthian/zynthian-data/commit/{}".format(git_info_data['gitid'])
+                        "title": "zynthian-data",
+                        "value": f"{git_info_data['display_name']} ({git_info_data['local_hash'][0:7]})",
+                        "url": f"https://github.com/zynthian/zyncoder/commit/{git_info_data['local_hash']}"
                     },
                     'WEBCONF': {
-                        'title': 'zynthian-webconf',
-                        'value': "{} ({})".format(git_info_webconf['branch'], git_info_webconf['gitid'][0:7], 'Update available' if git_info_webconf['update'] == '1' else ''),
-                        'url': "https://github.com/zynthian/zynthian-webconf/commit/{}".format(git_info_webconf['gitid'])
+                        "title": "zynthian-webconf",
+                        "value": f"{git_info_webconf['display_name']} ({git_info_webconf['local_hash'][0:7]})",
+                        "url": f"https://github.com/zynthian/zyncoder/commit/{git_info_webconf['local_hash']}"
                     }
                 }
             },
@@ -274,23 +274,6 @@ class DashboardHandler(ZynthianBasicHandler):
             }
 
         super().get("dashboard_block.html", "Dashboard", config, None)
-
-    @staticmethod
-    def get_git_info(path, check_updates=False):
-        info = zynconf.get_git_version_info(path)
-        if info["tag"]:
-            if info["frozen"]:
-                branch = info['tag']
-            else:
-                branch = f"{info['tag']}.{info['minor']}.{info['patch']}"
-        else:
-            branch = info['branch']
-        gitid = zynconf.get_git_local_hash(path, branch)
-        if check_updates:
-            update = zynconf.is_git_behind(path)
-        else:
-            update = None
-        return {"branch": branch, "gitid": gitid, "update": update}
 
     @staticmethod
     def get_host_name():
