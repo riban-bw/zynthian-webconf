@@ -279,13 +279,13 @@ class DashboardHandler(ZynthianBasicHandler):
     def get_git_info(path, check_updates=False):
         info = zynconf.get_git_version_info(path)
         if info["tag"]:
-            if info["minor"] or info["patch"]:
+            if info["frozen"]:
                 branch = info['tag']
             else:
                 branch = f"{info['tag']}.{info['minor']}.{info['patch']}"
         else:
             branch = info['branch']
-        gitid = zynconf.get_git_local_hash(path)
+        gitid = zynconf.get_git_local_hash(path, branch)
         if check_updates:
             update = zynconf.is_git_behind(path)
         else:
