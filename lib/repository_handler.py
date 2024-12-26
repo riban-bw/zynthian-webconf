@@ -37,9 +37,9 @@ import zynconf
 
 class RepositoryHandler(ZynthianConfigHandler):
     zynthian_base_dir = os.environ.get('ZYNTHIAN_DIR', "/zynthian")
-    stable_branch = "oram"
-    stable_tag = "oram-2409"
-    testing_branch = "vangelis"
+    stable_branch = os.environ.get('ZYNTHIAN_STABLE_BRANCH', "oram")
+    stable_tag = os.environ.get('ZYNTHIAN_STABLE_TAG', "oram-2409")
+    testing_branch = os.environ.get('ZYNTHIAN_TESTING_BRANCH', "vangelis")
 
     advanced_repository_list = [
         'zyncoder',
