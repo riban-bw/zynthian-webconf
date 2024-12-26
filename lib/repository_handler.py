@@ -37,9 +37,6 @@ import zynconf
 
 class RepositoryHandler(ZynthianConfigHandler):
     zynthian_base_dir = os.environ.get('ZYNTHIAN_DIR', "/zynthian")
-    stable_branch = os.environ.get('ZYNTHIAN_STABLE_BRANCH', "oram")
-    stable_tag = os.environ.get('ZYNTHIAN_STABLE_TAG', "oram-2409")
-    testing_branch = os.environ.get('ZYNTHIAN_TESTING_BRANCH', "vangelis")
 
     advanced_repository_list = [
         'zyncoder',
@@ -58,7 +55,7 @@ class RepositoryHandler(ZynthianConfigHandler):
         try:
             version = postedConfig['ZYNTHIAN_VERSION'][0]
         except:
-            version = self.stable_tag
+            version = zynconf.stable_tag
         errors = {}
         changed_repos = 0
         for repo in zynconf.zynthian_repositories:
@@ -108,9 +105,9 @@ class RepositoryHandler(ZynthianConfigHandler):
             version = repo_branches[0]
 
         version_options = {}
-        version_options[self.stable_tag] = f"Stable ({self.stable_tag}) - Current stable release version"
-        version_options[self.stable_branch] = f"Staging ({self.stable_branch}) - Pre-release testing version"
-        version_options[self.testing_branch] = f"Testing ({self.testing_branch}) - Active development version"
+        version_options[zynconf.stable_tag] = f"Stable ({zynconf.stable_tag}) - Current stable release version"
+        version_options[zynconf.stable_branch] = f"Staging ({zynconf.stable_branch}) - Pre-release testing version"
+        version_options[zynconf.testing_branch] = f"Testing ({zynconf.testing_branch}) - Active development version"
         version_options["custom"] = "Custom - User selected versions of each repository (allow 10s after selecting for webpage to refresh)"
 
         config = {
@@ -137,14 +134,14 @@ class RepositoryHandler(ZynthianConfigHandler):
                 options = sorted(options, key=str.casefold)
                 labels = {}
                 for label in tags:
-                    if label == self.stable_tag:
+                    if label == zynconf.stable_tag:
                         labels[label] = f"{label} - stable release"
                     else:
                         labels[label] = f"{label} - freeze on this tag (no updates)"
                 for label in branches:
-                    if label == self.stable_branch:
+                    if label == zynconf.stable_branch:
                         labels[label] = f"{label} - staging branch"
-                    elif label == self.testing_branch:
+                    elif label == zynconf.testing_branch:
                         labels[label] = f"{label} - main development branch"
                     else:
                         labels[label] = label
