@@ -159,20 +159,20 @@ class DashboardHandler(ZynthianBasicHandler):
             'SOFTWARE': {
                 'icon': 'glyphicon glyphicon-random',
                 'info': {
-                    'ZYNCODER': {
-                        "title": "zyncoder",
-                        "value": f"{git_info_zyncoder['display_name']} ({git_info_zyncoder['local_hash'][0:7]})",
-                        "url": f"https://github.com/zynthian/zyncoder/commit/{git_info_zyncoder['local_hash']}"
+                    'SYS': {
+                        "title": "zynthian-sys",
+                        "value": f"{git_info_sys['display_name']} ({git_info_sys['local_hash'][0:7]})",
+                        "url": f"https://github.com/zynthian/zyncoder/commit/{git_info_sys['local_hash']}"
                     },
                     'UI': {
                         "title": "zynthian-ui",
                         "value": f"{git_info_ui['display_name']} ({git_info_ui['local_hash'][0:7]})",
                         "url": f"https://github.com/zynthian/zyncoder/commit/{git_info_ui['local_hash']}"
                     },
-                    'SYS': {
-                        "title": "zynthian-sys",
-                        "value": f"{git_info_sys['display_name']} ({git_info_sys['local_hash'][0:7]})",
-                        "url": f"https://github.com/zynthian/zyncoder/commit/{git_info_sys['local_hash']}"
+                    'ZYNCODER': {
+                        "title": "zyncoder",
+                        "value": f"{git_info_zyncoder['display_name']} ({git_info_zyncoder['local_hash'][0:7]})",
+                        "url": f"https://github.com/zynthian/zyncoder/commit/{git_info_zyncoder['local_hash']}"
                     },
                     'DATA': {
                         "title": "zynthian-data",
